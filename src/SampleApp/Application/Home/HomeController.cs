@@ -9,6 +9,7 @@ namespace SampleApp.Application.Home
 
 	    public HomeController(IHelloProvider helloProvider)
 	    {
+			// works in application context
 		    if (helloProvider == null) throw new ArgumentNullException(nameof(helloProvider));
 		    _helloProvider = helloProvider;
 	    }
