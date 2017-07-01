@@ -16,14 +16,14 @@ namespace SampleApp.Integration.Asp
 
 		public IServiceScope CreateScope()
 		{
-			return new StructureMapServiceScope(_serviceProvider, _serviceScopeFactory.CreateScope());
+			return new SimpleInjectorBridgeServiceScope(_serviceProvider, _serviceScopeFactory.CreateScope());
 		}
 
-		private class StructureMapServiceScope : IServiceScope
+		private class SimpleInjectorBridgeServiceScope : IServiceScope
 		{
 			private readonly IServiceScope _serviceScope;
 
-			public StructureMapServiceScope(IServiceProvider serviceProvider, IServiceScope serviceScope)
+			public SimpleInjectorBridgeServiceScope(IServiceProvider serviceProvider, IServiceScope serviceScope)
 			{
 				ServiceProvider = serviceProvider;
 				_serviceScope = serviceScope;
