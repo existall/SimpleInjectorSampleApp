@@ -28,6 +28,11 @@ namespace SampleApp.Integration.Asp
 
 		public object GetRequiredService(Type serviceType)
 		{
+			if (serviceType == typeof(IServiceScopeFactory))
+			{
+				return _container.GetInstance(serviceType);
+			}
+
 			var instance = _provider.GetService(serviceType);
 			return instance ?? _container.GetRequiredService(serviceType);
 		}

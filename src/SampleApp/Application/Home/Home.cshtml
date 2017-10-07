@@ -1,6 +1,14 @@
 ﻿@using SampleApp.Application.Home
 
-@inject IHelloProvider Provider;    
 
 
 <h1>@Provider.SayHello()</h1>
+<h1>@Provider1.SayHello()</h1>
+
+<h2>@SomeProvider.Get()</h2>
+<h2>@SomeProvider1.Get()</h2>
+
+
+
+
+<div>@Model</div>

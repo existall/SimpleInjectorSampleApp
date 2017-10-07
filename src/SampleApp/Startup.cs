@@ -37,7 +37,8 @@ namespace SampleApp
 
 		public void ConfigureContainer(Container container)
 		{
-			container.RegisterSingleton<IHelloProvider, HelloProvider>();
+			container.Register<IHelloProvider, HelloProvider>(Lifestyle.Scoped);
+			
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

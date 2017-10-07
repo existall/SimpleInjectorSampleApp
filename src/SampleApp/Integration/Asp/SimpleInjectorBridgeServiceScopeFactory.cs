@@ -1,31 +1,32 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using SimpleInjector;
 
 namespace SampleApp.Integration.Asp
 {
 	internal sealed class SimpleInjectorBridgeServiceScopeFactory : IServiceScopeFactory
 	{
-		private readonly IServiceProvider _serviceProvider;
+		private readonly Container _container;
 		private readonly IServiceScopeFactory _serviceScopeFactory;
 
-		public SimpleInjectorBridgeServiceScopeFactory(IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory)
+		public SimpleInjectorBridgeServiceScopeFactory(Container container, IServiceScopeFactory serviceScopeFactory)
 		{
-			_serviceProvider = serviceProvider;
+			_container = container;
 			_serviceScopeFactory = serviceScopeFactory;
 		}
 
 		public IServiceScope CreateScope()
 		{
-			return new SimpleInjectorBridgeServiceScope(_serviceProvider, _serviceScopeFactory.CreateScope());
+			return new SimpleInjectorBridgeServiceScope(_container, _serviceScopeFactory.CreateScope());
 		}
 
 		private class SimpleInjectorBridgeServiceScope : IServiceScope
 		{
 			private readonly IServiceScope _serviceScope;
 
-			public SimpleInjectorBridgeServiceScope(IServiceProvider serviceProvider, IServiceScope serviceScope)
+			public SimpleInjectorBridgeServiceScope(Container container, IServiceScope serviceScope)
 			{
-				ServiceProvider = serviceProvider;
+				ServiceProvider = new SimpleInjectorBridgeServiceProvider(serviceScope.ServiceProvider, container);
 				_serviceScope = serviceScope;
 			}
 

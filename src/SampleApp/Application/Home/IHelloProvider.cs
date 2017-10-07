@@ -7,14 +7,21 @@ namespace SampleApp.Application.Home
 {
 	public interface IHelloProvider
 	{
-		string SayHello();
+		int SayHello();
 	}
 
 	class HelloProvider : IHelloProvider
 	{
-		public string SayHello()
+		private static int _counter;
+
+		public HelloProvider()
 		{
-			return "Hello";
+			_counter++;
+		}
+
+		public int SayHello()
+		{
+			return _counter;
 		}
 	}
 }
