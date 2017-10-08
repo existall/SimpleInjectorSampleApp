@@ -13,7 +13,7 @@ using SimpleInjector;
 
 namespace SampleApp
 {
-	public class Startup
+	public class Startup 
 	{
 		public Startup(IHostingEnvironment env)
 		{
@@ -27,18 +27,20 @@ namespace SampleApp
 
 		public IConfigurationRoot Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			// Add framework services.
 			services.AddMvc()
 				.AddFeatureFolderStructure();
+
+			services.AddScoped<IMsScopeCounter, MsScopeCounter>();
+
+			services.AddSingleton<IMsSingletonCounter, MsSingletonCounter>();
 		}
 
 		public void ConfigureContainer(Container container)
 		{
-			container.Register<IHelloProvider, HelloProvider>(Lifestyle.Scoped);
-			
+			container.Register<ISimpleScopeCounter, SimpleScopeCounter>(Lifestyle.Scoped);
+			container.RegisterSingleton<ISimpleSingletonCounter, SimpleSingletonCounter>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

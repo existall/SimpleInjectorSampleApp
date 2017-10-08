@@ -4,64 +4,49 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SampleApp.Application.Home
 {
-    public class HomeController : Controller
-    {
-	    private readonly IHelloProvider _helloProvider;
-	    private readonly IHostingEnvironment _hostingEnvironment;
+	public class HomeController : Controller
+	{
+		private readonly IHostingEnvironment _hostingEnvironment;
+		private readonly IMsScopeCounter _msScopeCounter;
+		private readonly IMsSingletonCounter _msSingletonCounter;
+		private readonly ISimpleScopeCounter _simpleScopeCounter;
+		private readonly ISimpleSingletonCounter _simpleSingletonCounter;
 
-	    public HomeController(IHelloProvider helloProvider,
-			IHostingEnvironment hostingEnvironment)
-	    {
-		    _helloProvider = helloProvider;
-		    _hostingEnvironment = hostingEnvironment;
-	    }
+		public HomeController(IHostingEnvironment hostingEnvironment,
+			IMsScopeCounter msScopeCounter,
+			IMsSingletonCounter msSingletonCounter,
+			ISimpleScopeCounter simpleScopeCounter,
+			ISimpleSingletonCounter simpleSingletonCounter)
+		{
+			if(hostingEnvironment == null)
+				throw new Exception("Cross wiring has failed with the composite service locator");
 
-	    [Route("")]
-	    public IActionResult Home()
-	    {
-		    var sayHello = _helloProvider.SayHello();
-
-		    return View("Home/Home", sayHello);
+			_hostingEnvironment = hostingEnvironment;
+			_msScopeCounter = msScopeCounter;
+			_msSingletonCounter = msSingletonCounter;
+			_simpleScopeCounter = simpleScopeCounter;
+			_simpleSingletonCounter = simpleSingletonCounter;
 		}
-    }
-}
 
-public interface ISomeProvider1
-{
-	string Get();
-}
-
-public class SomeProvider1 : ISomeProvider1
-{
-	private static int _counter;
-
-	public SomeProvider1()
-	{
-		_counter++;
+		[Route("")]
+		public IActionResult Home()
+		{
+			return View("Home/Home", new CounterModel
+			{
+				MsScopedCounter = _msScopeCounter.InstancesCreated,
+				MsSingletonCounter = _msSingletonCounter.InstancesCreated,
+				SimpleScopedCounter = _simpleScopeCounter.InstancesCreated,
+				SimpleSingletonCounter = _simpleSingletonCounter.InstancesCreated
+			});
+		}
 	}
 
-	public string Get()
+	public class CounterModel
 	{
-		return _counter.ToString();
-	}
-}
+		public int MsScopedCounter { get; set; }
+		public int MsSingletonCounter { get; set; }
 
-public interface ISomeProvider
-{
-	string Get();
-}
-
-public class SomeProvider : ISomeProvider
-{
-	private static int _counter;
-
-	public SomeProvider()
-	{
-		_counter++;
-	}
-
-	public string Get()
-	{
-		return _counter.ToString();
+		public int SimpleScopedCounter { get; set; }
+		public int SimpleSingletonCounter { get; set; }
 	}
 }

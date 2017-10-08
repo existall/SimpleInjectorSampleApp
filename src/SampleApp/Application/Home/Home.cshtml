@@ -1,14 +1,35 @@
 ﻿@using SampleApp.Application.Home
 
+@model CounterModel
+
+@inject IMsScopeCounter MsScopeCounter;
+@inject IMsSingletonCounter MsSingletonCounter;
+	
+@inject ISimpleScopeCounter SimpleScopeCounter;
+@inject ISimpleSingletonCounter SimpleSingletonCounter;
 
 
-<h1>@Provider.SayHello()</h1>
-<h1>@Provider1.SayHello()</h1>
+<h1> MS </h1>
 
-<h2>@SomeProvider.Get()</h2>
-<h2>@SomeProvider1.Get()</h2>
+<h2>injectable (from view)</h2>
+<div>Scoped Counter: @MsScopeCounter.InstancesCreated </div>
+<br/>
+<div>Singleton Counter: @MsSingletonCounter.InstancesCreated</div>
+
+<h2>Model (from controller)</h2>
+<div>Scoped Counter: @Model.MsScopedCounter</div>
+<br />
+<div>Singleton Counter: @Model.MsSingletonCounter</div>
 
 
+<h1> Simple </h1>
 
+<h2>injectable (from view)</h2>
+<div>Scoped Counter: @SimpleScopeCounter.InstancesCreated </div>
+<br />
+<div>Singleton Counter: @SimpleSingletonCounter.InstancesCreated</div>
 
-<div>@Model</div>
+<h2>Model (from controller)</h2>
+<div>Scoped Counter: @Model.SimpleScopedCounter</div>
+<br />
+<div>Singleton Counter: @Model.SimpleSingletonCounter</div>
